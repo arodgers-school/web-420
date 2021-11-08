@@ -1,0 +1,69 @@
+# Title:
+#    Assignment 3.2
+# Author:
+#    Adam Rodgers
+# Date:
+#    11/07/2021
+# Modified By: Adam Rodgers
+# Description: Describing an API with an API desciption format
+# Resources:
+
+openapi: 3.0.0
+info:
+  title: Composer API
+  version: "1.0"
+  description: Composer API
+
+# Paths
+paths:
+  /composers:
+    get:
+      summary: Returns composers
+      description: Returns a list of composers from Atlas
+      responses:
+        "200":
+          description: Composer Documents
+        "500":
+          description: Server Exceptions
+        "501":
+          description: MongoDB Exceptions
+    post:
+      summary: Creates a new composer object
+      description: API for adding new composer objects
+      requestBody:
+        description: Composer's Information
+        content:
+          applications/json:
+            schema:
+              type: "object"
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+      responses:
+        "200":
+          description: User Added
+        "500":
+          description: Server Exception
+        "501":
+          description: MongoDB Exception
+
+  /composers/{id}:
+    get:
+      summary: Returns a composer document
+      description: API for returning a single composer object from MongoDB
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The composer id requested by the user
+      responses:
+        "200":
+          description: Composer Document in JSON Format
+        "500":
+          description: Server Exception
+        "501":
+          description: MongoDB Exception
