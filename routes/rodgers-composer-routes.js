@@ -1,7 +1,22 @@
+/*
+Title: 
+Assignment 4.2
+Author: Adam Rodgers
+Date: 
+  14 Nov 2021
+Modified By: Adam Rodgers
+Description: Composer API
+Resources:
+  Bellevue University Github Repo
+*/
+
+// Set requires
 var express = require("express");
 var router = express.Router();
 
 var Composer = require("../models/rodgers-composer");
+
+// Find All
 
 /**
  * findAllComposers
@@ -20,6 +35,7 @@ var Composer = require("../models/rodgers-composer");
  *       '501':
  *         description: MongoDB Exception.
  */
+
 router.get("/composers", async (req, res) => {
   try {
     Composer.find({}, function (err, composers) {
@@ -40,6 +56,8 @@ router.get("/composers", async (req, res) => {
     });
   }
 });
+
+// Find by ID
 
 /**
  * findComposerById
@@ -65,6 +83,7 @@ router.get("/composers", async (req, res) => {
  *       '501':
  *         description: MongoDB Exception
  */
+
 router.get("/composers/:id", async (req, res) => {
   try {
     Composer.findOne({ _id: req.params.id }, function (err, composer) {
@@ -85,6 +104,8 @@ router.get("/composers/:id", async (req, res) => {
     });
   }
 });
+
+// Add composer
 
 /**
  * createComposer
@@ -114,6 +135,7 @@ router.get("/composers/:id", async (req, res) => {
  *       '501':
  *         description: MongoDB Exception
  */
+
 router.post("/composers", async (req, res) => {
   try {
     const newComposer = {
