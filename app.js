@@ -3,14 +3,16 @@ Title:
     Assignment 1.2
     Assignment 4.2
     Assignment 5.2
+    Assignment 6.2
 Author: 
     Adam Rodgers
 Date: 
     10/24/2021
     11/14/2021
     11/21/2021
+    11/28/2021
 Modified By: Adam Rodgers
-Description: GitHub and Project Setup
+Description: API Assignments
 Resources:
     Bellevue University WEB420 Github Repo
 */
@@ -23,6 +25,7 @@ var swaggerUi = require("swagger-ui-express");
 var swaggerJsdoc = require("swagger-jsdoc");
 var composerAPI = require("./routes/rodgers-composer-routes");
 var personAPI = require("./routes/rodgers-person-routes");
+var userAPI = require("./routes/rodgers-session-routes");
 
 // Initialize express
 var app = express();
@@ -69,7 +72,7 @@ openapiSpecification = swaggerJsdoc(options);
 
 // Set api-docs endpoint to serve swagger view with options
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
-app.use("/api", composerAPI, personAPI);
+app.use("/api", composerAPI, personAPI, userAPI);
 
 // Start webserver on Heroku-specified port, or 3000 locally
 http.createServer(app).listen(port, function () {
