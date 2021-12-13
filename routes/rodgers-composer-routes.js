@@ -1,9 +1,10 @@
 /*
 Title: 
-Assignment 4.2
+Assignment 4.2 / 8.2
 Author: Adam Rodgers
 Date: 
   14 Nov 2021
+  12 Dec 2021
 Modified By: Adam Rodgers
 Description: Composer API
 Resources:
@@ -50,7 +51,6 @@ router.get("/composers", async (req, res) => {
       }
     });
   } catch (e) {
-    console.log(e);
     res.status(500).send({
       message: `Server Exception: ${e.message}`,
     });
@@ -98,7 +98,6 @@ router.get("/composers/:id", async (req, res) => {
       }
     });
   } catch (e) {
-    console.log(e);
     res.status(500).send({
       message: `Server Exception: ${e.message}`,
     });
@@ -151,6 +150,124 @@ router.post("/composers", async (req, res) => {
         });
       } else {
         console.log(composer);
+        res.json(composer);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).send({
+      message: `Server Exception: ${e.message}`,
+    });
+  }
+});
+
+/**
+ * updateComposerById
+ * @openapi
+ * /api/composers/{id}:
+ *   put:
+ *     tags:
+ *       - Composers
+ *     name: updateComposerById
+ *     description: API for updating a document.
+ *     summary: Updates a composer document by ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Id to filter the collection by
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       description: Composer information
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - firstName
+ *               - lastName
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Array of composer documents
+ *       '401':
+ *         description: Invalid composerId
+ *       '500':
+ *         description: Server Exception
+ *       '501':
+ *         description: MongoDB Exception
+ */
+
+router.put("/composers/:id", async (req, res) => {
+  try {
+    Composer.findOne({ _id: req.params.id }, function (err, composer) {
+      if (err) {
+        console.log(err);
+        res.status(401).send({
+          message: `Invalid composerID: ${err}`,
+        });
+      } else {
+        composer.set({
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+        });
+        composer.save(function (err, updatedComposer) {
+          if (err) {
+            console.log(err);
+            res.json(updatedComposer);
+          } else {
+            res.json(updatedComposer);
+          }
+        });
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).send({
+      message: `Server Exception: ${e.message}`,
+    });
+  }
+});
+
+/**
+ * deleteComposerById
+ * @openapi
+ * /api/composers/{id}:
+ *   delete:
+ *     tags:
+ *       - Composers
+ *     name: deleteComposer
+ *     description: API for deleting a document.
+ *     summary: Removes a composer document by ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Id of the document
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Composer document
+ *       '500':
+ *         description: Server Exception
+ *       '501':
+ *         description: MongoDB Exception
+ */
+
+router.delete("/composers/:id", async (req, res) => {
+  try {
+    Composer.findByIdAndDelete({ _id: req.params.id }, function (err, composer) {
+      if (err) {
+        console.log(err);
+        res.status(401).send({
+          message: `Invalid Composer Id: ${err}`,
+        });
+      } else {
         res.json(composer);
       }
     });
